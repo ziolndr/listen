@@ -1,0 +1,851 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<title>LISTEN — Social Impact Coherence</title>
+<meta name="description" content="A social-impact coherence surface powered by ARBITER.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fragment+Mono:ital@0;1&family=Instrument+Sans:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+:root{
+  --paper:#fff;
+  --ink:#000;
+  --body:#222;
+  --muted:#777;
+  --quiet:#aaa;
+  --line:#e5e5e5;
+  --line-dark:#cfcfcf;
+  --wash:#f7f7f5;
+  --signal:#ff4d00;
+  --blue:#09f;
+  --max:1480px;
+  --pad:32px;
+  --sans:"Instrument Sans",Arial,sans-serif;
+  --mono:"Fragment Mono",ui-monospace,monospace;
+}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--body);font-family:var(--sans);font-size:15px;line-height:1.25;-webkit-font-smoothing:antialiased}
+button,textarea,input{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:inherit}
+::selection{background:#000;color:#fff}
+.shell{width:min(100%,var(--max));margin:0 auto}
+.nav{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav-inner{height:74px;padding:0 var(--pad);display:flex;align-items:center;justify-content:space-between;gap:24px}
+.brand{display:flex;align-items:center;gap:14px;text-decoration:none;min-width:0}
+.brand strong{font-size:24px;line-height:1;letter-spacing:-.9px;font-weight:700;color:#111}
+.brand>span:not(.brand-mark){font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.nav-meta{display:flex;gap:24px;align-items:center;font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.brand-lock{display:flex;align-items:center;gap:12px;font-family:var(--sans)!important;font-size:inherit!important;color:inherit!important;letter-spacing:0!important;text-transform:none!important}
+.brand-mark-mini{width:28px;height:28px;object-fit:contain;display:block}
+.brand .brand-mark{position:relative;display:inline-block;width:34px;height:22px;flex:0 0 auto;color:#1557ff!important;font-family:initial;font-size:initial;letter-spacing:initial;text-transform:none}
+.brand-mark .core{position:absolute;left:50%;top:50%;width:12px;height:12px;background:currentColor;border-radius:999px;transform:translate(-50%,-50%)}
+.brand-mark .ring{position:absolute;top:1px;bottom:1px;width:9px;border:4px solid currentColor;border-top-color:transparent;border-bottom-color:transparent;border-radius:999px}
+.brand-mark .left{border-right-color:transparent}
+.brand-mark .right{border-left-color:transparent}
+.brand-mark .outer.left{left:0}
+.brand-mark .inner.left{left:8px}
+.brand-mark .inner.right{right:8px}
+.brand-mark .outer.right{right:0}
+.signal-dot{width:8px;height:8px;background:var(--signal);display:inline-block}
+.hero{padding:54px var(--pad) 40px;border-bottom:1px solid var(--line)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(390px,.95fr);gap:34px;align-items:stretch}
+.eyebrow{font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:0 0 18px}
+h1{font-size:clamp(86px,10vw,150px);line-height:.78;letter-spacing:-.085em;margin:0;font-weight:600;color:#000}
+.hero-dek{margin:18px 0 0;max-width:11ch;font-size:clamp(28px,3vw,44px);line-height:.96;letter-spacing:-1.5px;font-weight:500;color:#202020}
+.hero-side{border-left:1px solid var(--line);padding-left:28px;display:grid;grid-template-columns:160px minmax(0,1fr);gap:20px 22px;align-content:start}
+.hero-copy{display:flex;flex-direction:column;justify-content:space-between;min-height:640px;padding-right:8px}
+.hero-mark-card{border:1px solid var(--line);padding:20px 16px 16px;background:linear-gradient(180deg,#fff,#fbfbf9);min-height:160px;display:flex;align-items:center;justify-content:center}
+.hero-mark-card img{width:min(100%,108px);display:block}
+.hero-media-block{grid-column:2;grid-row:1 / span 2}
+.hero-visual{border:1px solid var(--line);background:#f5f5f3;overflow:hidden;aspect-ratio:4/5;min-height:320px}
+.hero-visual img{width:100%;height:100%;object-fit:cover;display:block}
+.hero-visual-caption{display:flex;justify-content:space-between;gap:18px;padding-top:10px;font-family:var(--mono);font-size:9px;line-height:1.4;text-transform:uppercase;color:var(--muted)}
+.hero-summary{grid-column:1 / -1;border-top:1px solid var(--line);padding-top:18px;display:grid;grid-template-columns:minmax(0,1fr) 210px;gap:18px;align-items:start}
+.side-copy{margin:0;font-size:28px;line-height:1.02;max-width:17ch;letter-spacing:-1px;color:#101010}
+.data-stats{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line);align-self:start}
+.stat{padding:14px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:#fff}
+.stat strong{display:block;font-size:28px;line-height:1;letter-spacing:-1px;color:#000}
+.stat span{display:block;margin-top:7px;font-family:var(--mono);font-size:9px;line-height:1.3;text-transform:uppercase;color:var(--muted)}
+.mode-strip{padding:0 var(--pad);border-bottom:1px solid var(--line)}
+.mode-row{display:flex;gap:0}
+.mode-btn{appearance:none;border:0;border-right:1px solid var(--line);background:#fff;padding:17px 22px 16px 0;margin-right:22px;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--quiet);position:relative}
+.mode-btn.active{color:#000}
+.mode-btn.active::after{content:"";position:absolute;left:0;right:22px;bottom:-1px;height:3px;background:#000}
+.listen-panel{padding:36px var(--pad) 42px;border-bottom:1px solid var(--line)}
+.prompt-grid{display:grid;grid-template-columns:minmax(0,1fr) 200px;gap:24px;align-items:end}
+.prompt-wrap{position:relative;border-top:1px solid #000;border-bottom:1px solid #000;padding:18px 74px 18px 0}
+textarea{display:block;width:100%;border:0;outline:0;resize:none;background:transparent;font-size:clamp(28px,3.5vw,58px);line-height:1.02;letter-spacing:-2px;font-weight:500;min-height:2.2em;max-height:5.2em;overflow:auto}
+textarea::placeholder{color:#bbb}
+.go{position:absolute;right:0;top:50%;transform:translateY(-50%);width:54px;height:54px;border:0;background:#000;color:#fff;font-size:26px;display:grid;place-items:center;transition:background .15s ease}
+.go:hover{background:var(--signal)}
+.listen-note{font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.45;text-transform:uppercase}
+.examples{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+.example{border:1px solid var(--line);background:#fff;padding:8px 10px;font-family:var(--mono);font-size:9px;color:#666;text-align:left}
+.example:hover{border-color:#000;color:#000}
+.status{margin-top:16px;display:flex;justify-content:space-between;gap:16px;font-family:var(--mono);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+.soul-strip{padding:0 var(--pad) 42px;border-bottom:1px solid var(--line)}
+.soul-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.soul-card{border:1px solid var(--line);background:#fff;text-decoration:none;color:inherit}
+.soul-media{aspect-ratio:16/10;overflow:hidden;background:#f4f4f2}
+.soul-media img{width:100%;height:100%;display:block;object-fit:cover}
+.soul-copy{padding:14px 14px 16px}
+.soul-label{font-family:var(--mono);font-size:9px;line-height:1.4;text-transform:uppercase;color:var(--muted)}
+.soul-title{margin:8px 0 0;font-size:22px;line-height:1;letter-spacing:-.8px;color:#000}
+.soul-copy p{margin:8px 0 0;font-size:13px;line-height:1.38;color:#666}
+.results{display:none}
+body.has-results .results{display:block}
+.results-head{padding:34px var(--pad) 0}
+.result-topline{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;border-bottom:1px solid #000;padding-bottom:16px}
+.result-query{font-size:clamp(30px,4vw,66px);line-height:.96;letter-spacing:-2.6px;font-weight:600;max-width:18ch}
+.result-measure{font-family:var(--mono);font-size:9px;color:var(--muted);text-align:right;text-transform:uppercase;line-height:1.5}
+.seats{display:flex;flex-wrap:wrap;gap:0;border-bottom:1px solid var(--line)}
+.seat-btn{border:0;border-right:1px solid var(--line);background:#fff;padding:13px 16px;font-family:var(--mono);font-size:9px;text-transform:uppercase;color:#888;position:relative}
+.seat-btn.active{color:#000;background:var(--wash)}
+.seat-btn.active::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;background:var(--signal)}
+.result-list{border-bottom:1px solid #000}
+.result-row{display:grid;grid-template-columns:56px 110px 102px minmax(240px,1.5fr) minmax(220px,1fr) 110px;border-bottom:1px solid var(--line);min-height:96px;background:#fff;text-decoration:none;color:inherit;transition:background .14s ease}
+.result-row:hover{background:var(--wash)}
+.result-row.top{min-height:138px}
+.cell{padding:15px 14px;border-right:1px solid var(--line);min-width:0}
+.result-thumb{padding:0;overflow:hidden;background:#f3f3f0}
+.result-thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.result-row.top .result-thumb img{filter:saturate(1.02)}
+.cell:last-child{border-right:0}
+.rank{font-family:var(--mono);font-size:11px;color:#777}
+.type{font-family:var(--mono);font-size:9px;text-transform:uppercase;color:#777;letter-spacing:.04em}
+.title-cell h3{margin:0;font-size:clamp(19px,2vw,29px);line-height:1.02;letter-spacing:-.9px;color:#000;font-weight:600}
+.title-cell .org{margin-top:8px;font-family:var(--mono);font-size:9px;color:#888;text-transform:uppercase}
+.desc{font-size:14px;line-height:1.32;color:#555;letter-spacing:-.2px}
+.score{text-align:right;font-family:var(--mono);font-size:12px;color:#000}
+.score strong{display:block;font-family:var(--sans);font-size:29px;letter-spacing:-1px;line-height:1}
+.delta{display:block;margin-top:7px;font-family:var(--mono);font-size:8px;color:var(--muted)}
+.result-detail{display:none;grid-column:1/-1;border-top:1px solid var(--line);background:#fafafa;padding:18px 56px 22px;grid-template-columns:220px minmax(0,1fr) .85fr;gap:24px;align-items:start}
+.detail-media{background:#f3f3f0;border:1px solid var(--line);overflow:hidden;aspect-ratio:4/5}
+.detail-media img{display:block;width:100%;height:100%;object-fit:cover}
+.result-row.open + .result-detail{display:grid}
+.detail-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.tag{font-family:var(--mono);font-size:8px;border:1px solid var(--line-dark);padding:5px 7px;text-transform:uppercase;color:#666}
+.source-link{font-family:var(--mono);font-size:9px;text-transform:uppercase;color:#000;text-underline-offset:3px}
+.source-note{font-family:var(--mono);font-size:9px;color:#888;line-height:1.5;text-transform:uppercase}
+.density{padding:54px var(--pad);border-bottom:1px solid var(--line)}
+.section-head{display:flex;justify-content:space-between;gap:24px;align-items:flex-end;margin-bottom:20px}
+.section-head h2{margin:0;font-size:clamp(44px,7vw,102px);line-height:.78;letter-spacing:-5px;font-weight:600;color:#000}
+.section-head p{max-width:36ch;margin:0;font-size:15px;color:#666}
+.index-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid #000;border-left:1px solid var(--line)}
+.index-item{min-height:240px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;flex-direction:column;justify-content:space-between;gap:0;background:#fff}
+.index-item:hover{background:var(--wash)}
+.index-media{aspect-ratio:16/10;overflow:hidden;background:#f2f2ef;border-bottom:1px solid var(--line)}
+.index-media img{display:block;width:100%;height:100%;object-fit:cover}
+.index-copy{padding:14px;display:flex;flex-direction:column;justify-content:space-between;gap:18px;flex:1}
+.index-type{font-family:var(--mono);font-size:8px;color:#888;text-transform:uppercase}
+.index-item h4{margin:0;font-size:18px;line-height:1.05;letter-spacing:-.5px;color:#000}
+.index-item p{margin:8px 0 0;font-size:12px;line-height:1.35;color:#666}
+.index-source{font-family:var(--mono);font-size:8px;text-transform:uppercase;text-decoration:underline;text-underline-offset:3px}
+.footer{padding:30px var(--pad) 70px;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:9px;color:#888;text-transform:uppercase}.footer-left{justify-self:start}.footer-right{justify-self:end;text-align:right}.footer-logo-wrap{display:flex;align-items:center;justify-content:center}.footer-logo{position:relative;display:inline-block;width:54px;height:34px;color:#1557ff!important;flex:0 0 auto}.footer-logo .core{position:absolute;left:50%;top:50%;width:18px;height:18px;background:currentColor;border-radius:999px;transform:translate(-50%,-50%)}.footer-logo .ring{position:absolute;top:2px;bottom:2px;width:13px;border:5px solid currentColor;border-top-color:transparent;border-bottom-color:transparent;border-radius:999px}.footer-logo .left{border-right-color:transparent}.footer-logo .right{border-left-color:transparent}.footer-logo .outer.left{left:0}.footer-logo .inner.left{left:12px}.footer-logo .inner.right{right:12px}.footer-logo .outer.right{right:0}
+.loader{display:none;position:fixed;inset:0;z-index:100;background:#fff;color:#000}
+body.loading .loader{display:block}
+.loader-inner{height:100%;padding:32px;display:flex;flex-direction:column;justify-content:space-between}
+.loader-top{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;text-transform:uppercase}
+.loader-query{font-size:clamp(48px,8vw,124px);line-height:.82;letter-spacing:-6px;font-weight:600;max-width:13ch}
+.loader-bar{height:2px;background:#eee;overflow:hidden}
+.loader-bar span{display:block;height:100%;width:32%;background:#000;animation:measure 1.2s ease-in-out infinite}
+@keyframes measure{0%{transform:translateX(-110%)}100%{transform:translateX(420%)}}
+.error{display:none;margin:18px 0 0;padding:12px 14px;background:#fff3ef;border-left:3px solid var(--signal);font-family:var(--mono);font-size:10px;line-height:1.5}
+.error.show{display:block}
+@media(max-width:980px){
+  :root{--pad:20px}
+  .hero-grid,.prompt-grid{grid-template-columns:1fr}
+  .hero-side{border-left:0;border-top:1px solid var(--line);padding:22px 0 0}
+  .prompt-grid{gap:16px}
+  .result-row{grid-template-columns:44px 82px 78px minmax(0,1fr) 84px}
+  .result-row .desc{display:none}
+  .result-detail{padding:18px 20px;grid-template-columns:160px 1fr}
+  .result-detail .source-note{grid-column:1/-1}
+  .index-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .soul-grid{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .nav-inner{height:62px}
+  .nav-meta span:not(.signal-dot){display:none}
+  .hero{padding-top:44px}
+  h1{font-size:clamp(68px,24vw,112px)}
+  .hero-dek{font-size:30px}
+  .data-stats{grid-template-columns:1fr 1fr}
+  .mode-row{overflow-x:auto}
+  .mode-btn{white-space:nowrap}
+  textarea{font-size:34px;letter-spacing:-1.5px}
+  .result-topline{display:block}
+  .result-measure{text-align:left;margin-top:16px}
+  .result-row{grid-template-columns:34px 60px 58px minmax(0,1fr) 72px;min-height:112px}
+  .result-row .result-thumb{display:none}
+  .cell{padding:12px 8px}
+  .title-cell h3{font-size:19px}
+  .score strong{font-size:22px}
+  .index-grid{grid-template-columns:1fr}
+  .hero-mark-card img{width:148px}
+  .section-head{display:block}
+  .section-head p{margin-top:18px}
+  .footer{grid-template-columns:1fr;justify-items:start;gap:14px}
+  .footer-left,.footer-right,.footer-logo-wrap{justify-self:start;text-align:left}
+}
+
+@media (min-width:1100px){
+  .hero-copy::after{content:"REAL PEOPLE · REAL COMMUNITIES · REAL NEEDS";margin-top:32px;padding-top:14px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10px;line-height:1.5;text-transform:uppercase;color:var(--muted);letter-spacing:.06em;display:block;max-width:44ch}
+}
+@media (max-width:1199px){
+  .hero-grid{grid-template-columns:minmax(0,1fr);gap:28px}
+  .hero-copy{min-height:0;padding-right:0}
+  .hero-side{grid-template-columns:1fr;border-left:0;padding-left:0}
+  .hero-media-block{grid-column:1;grid-row:auto}
+  .hero-summary{grid-template-columns:1fr}
+  .side-copy{font-size:22px;max-width:none}
+}
+@media (max-width:760px){
+  .nav-inner{height:66px;padding:0 18px;gap:16px}
+  .nav-meta{gap:14px;font-size:9px}
+  .brand{gap:10px}
+  .brand span{display:none}
+  .brand strong{font-size:22px}
+  .hero{padding:34px 18px 28px}
+  .mode-strip,.listen-panel,.soul-strip,.results-head,.density,.foot{padding-left:18px;padding-right:18px}
+  .hero-dek{max-width:14ch;font-size:clamp(24px,8vw,34px)}
+  .hero-mark-card{min-height:120px}
+}
+
+
+/* Desktop composition rebuild */
+.hero{padding:46px var(--pad) 34px;border-bottom:1px solid var(--line)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(520px,.88fr);gap:42px;align-items:start}
+.hero-copy{display:flex;flex-direction:column;min-height:0;padding:6px 0 0}
+.hero-copy::after{display:none!important}
+.eyebrow{margin:0 0 28px}
+h1{font-size:clamp(92px,9vw,150px);line-height:.78;letter-spacing:-.085em}
+.hero-dek{margin:28px 0 0;max-width:12ch;font-size:clamp(30px,3.1vw,46px);line-height:.98;letter-spacing:-1.55px}
+.hero-footline{margin-top:42px;padding-top:14px;border-top:1px solid var(--line);max-width:520px;font-family:var(--mono);font-size:9px;line-height:1.45;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.hero-side{border-left:1px solid var(--line);padding-left:28px;display:grid;grid-template-columns:170px minmax(0,1fr);gap:18px 20px;align-items:start}
+.hero-mark-card{grid-column:1;min-height:170px;aspect-ratio:1;padding:0;display:grid;place-items:center;border:1px solid var(--line);background:#fff}.hero-mark-card .brand-mark{position:relative;display:inline-block;width:92px;height:64px;color:#1557ff!important;flex:0 0 auto}.hero-mark-card .brand-mark .core{position:absolute;left:50%;top:50%;width:34px;height:34px;background:currentColor;border-radius:999px;transform:translate(-50%,-50%)}.hero-mark-card .brand-mark .ring{position:absolute;top:5px;bottom:5px;width:24px;border:8px solid currentColor;border-top-color:transparent;border-bottom-color:transparent;border-radius:999px}.hero-mark-card .brand-mark .left{border-right-color:transparent}.hero-mark-card .brand-mark .right{border-left-color:transparent}.hero-mark-card .brand-mark .outer.left{left:0}.hero-mark-card .brand-mark .inner.left{left:20px}.hero-mark-card .brand-mark .inner.right{right:20px}.hero-mark-card .brand-mark .outer.right{right:0}
+.hero-media-block{grid-column:2;grid-row:1 / span 2;min-width:0}
+.hero-visual{aspect-ratio:4/5;min-height:0;border:1px solid var(--line);overflow:hidden;background:#f5f5f3}
+.hero-visual img{width:100%;height:100%;object-fit:cover;display:block}
+.hero-visual-caption{padding-top:9px}
+.hero-summary{grid-column:1 / -1;border-top:1px solid var(--line);padding-top:18px;display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:20px;align-items:start}
+.side-copy{margin:0;max-width:16ch;font-size:25px;line-height:1.02;letter-spacing:-.9px}
+.data-stats{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line);align-self:start}
+.stat{padding:12px 13px 11px;min-height:78px}.stat strong{font-size:27px}.stat span{font-size:8px}
+@media (max-width:1250px){.hero-grid{grid-template-columns:minmax(0,1fr) minmax(430px,.9fr);gap:32px}.hero-side{grid-template-columns:145px minmax(0,1fr)}.hero-mark-card{min-height:145px}.hero-summary{grid-template-columns:1fr}.side-copy{max-width:22ch}}
+@media (max-width:980px){.hero-grid{grid-template-columns:1fr}.hero-side{border-left:0;padding-left:0;grid-template-columns:160px minmax(0,1fr);border-top:1px solid var(--line);padding-top:24px}.hero-copy{padding-top:0}}
+@media (max-width:760px){.hero{padding:32px 18px 26px}.hero-side{grid-template-columns:1fr}.hero-mark-card{width:124px;min-height:124px;aspect-ratio:1}.hero-media-block{grid-column:1;grid-row:auto}.hero-summary{grid-column:1}.hero-footline{margin-top:28px}}
+
+
+/* LISTEN full-bleed hero rebuild */
+.hero-fullbleed{padding:0!important;border-bottom:1px solid var(--line);overflow:hidden;background:#fff}
+.hero-stage{display:grid;grid-template-columns:minmax(430px,40%) minmax(0,60%);min-height:620px;width:100%;}
+.hero-copy-panel{padding:72px 54px 54px max(var(--pad),calc((100vw - var(--max))/2 + var(--pad)));display:flex;flex-direction:column;justify-content:flex-start;background:#fff;position:relative;z-index:2}
+.hero-copy-panel .eyebrow{max-width:46ch;margin:0 0 48px;font-size:10px;line-height:1.55}
+.hero-title-lockup{display:flex;align-items:flex-end;gap:28px;min-width:0}
+.hero-title-lockup h1{margin:0;font-size:clamp(92px,9vw,158px);line-height:.78;letter-spacing:-.085em;white-space:nowrap}
+.hero-inline-logo{position:relative;display:inline-block;width:78px;height:52px;color:#1557ff!important;flex:0 0 auto;margin-bottom:8px}
+.hero-inline-logo .core{position:absolute;left:50%;top:50%;width:28px;height:28px;background:currentColor;border-radius:999px;transform:translate(-50%,-50%)}
+.hero-inline-logo .ring{position:absolute;top:4px;bottom:4px;width:20px;border:7px solid currentColor;border-top-color:transparent;border-bottom-color:transparent;border-radius:999px}
+.hero-inline-logo .left{border-right-color:transparent}.hero-inline-logo .right{border-left-color:transparent}
+.hero-inline-logo .outer.left{left:0}.hero-inline-logo .inner.left{left:17px}.hero-inline-logo .inner.right{right:17px}.hero-inline-logo .outer.right{right:0}
+.hero-copy-panel .hero-dek{margin:34px 0 0;max-width:none;font-size:clamp(34px,3.3vw,52px);line-height:1.01;letter-spacing:-1.8px;color:#111}
+.hero-copy-panel .hero-footline{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);max-width:500px;font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.hero-image-panel{position:relative;min-width:0;min-height:620px;background:#111;overflow:hidden}
+.hero-image-panel>img{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;object-position:center center}
+.hero-stats-overlay{position:absolute;right:max(var(--pad),calc((100vw - var(--max))/2 + var(--pad)));bottom:0;width:min(390px,42%);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-left:1px solid var(--line-dark);border-top:1px solid var(--line-dark);z-index:2}
+.hero-stats-overlay .stat{min-height:112px;padding:22px 24px;background:transparent;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.hero-stats-overlay .stat strong{font-size:36px;letter-spacing:-1.5px}
+.hero-stats-overlay .stat span{margin-top:12px;font-size:9px;line-height:1.4}
+.hero-lower-band{min-height:158px;display:grid;grid-template-columns:minmax(0,1.2fr) 1px minmax(240px,.8fr);align-items:center;gap:34px;padding:30px max(var(--pad),calc((100vw - var(--max))/2 + var(--pad)));background:#f5f4f1}
+.hero-lower-copy{font-size:clamp(24px,2.2vw,34px);line-height:1.02;letter-spacing:-1px;color:#111;max-width:28ch}
+.hero-lower-rule{width:1px;height:72px;background:var(--line-dark);justify-self:center}
+.hero-lower-link{justify-self:start;font-family:var(--mono);font-size:10px;letter-spacing:.04em;text-transform:uppercase;text-underline-offset:5px;color:#1557ff}
+
+@media(max-width:1180px){
+  .hero-stage{grid-template-columns:minmax(380px,46%) minmax(0,54%);min-height:580px}
+  .hero-copy-panel{padding-top:56px}
+  .hero-copy-panel .eyebrow{margin-bottom:36px}
+  .hero-image-panel{min-height:580px}
+  .hero-stats-overlay{width:min(340px,60%);right:20px}
+}
+@media(max-width:900px){
+  .hero-stage{grid-template-columns:1fr;min-height:0}
+  .hero-copy-panel{padding:44px var(--pad) 40px;min-height:0}
+  .hero-title-lockup{gap:18px}
+  .hero-inline-logo{width:58px;height:40px;margin-bottom:4px}
+  .hero-inline-logo .core{width:22px;height:22px}
+  .hero-inline-logo .ring{top:3px;bottom:3px;width:15px;border-width:5px}
+  .hero-inline-logo .outer.left{left:0}.hero-inline-logo .inner.left{left:13px}.hero-inline-logo .inner.right{right:13px}.hero-inline-logo .outer.right{right:0}
+  .hero-image-panel{min-height:520px}
+  .hero-stats-overlay{right:0;width:min(360px,82%)}
+  .hero-lower-band{grid-template-columns:1fr;gap:18px;min-height:0;padding:28px var(--pad)}
+  .hero-lower-rule{display:none}.hero-lower-link{justify-self:start}
+}
+@media(max-width:640px){
+  .hero-copy-panel{padding:34px 18px 32px}
+  .hero-copy-panel .eyebrow{margin-bottom:28px;font-size:9px}
+  .hero-title-lockup{align-items:center;gap:12px}
+  .hero-title-lockup h1{font-size:clamp(70px,24vw,110px)}
+  .hero-inline-logo{width:46px;height:32px}
+  .hero-inline-logo .core{width:18px;height:18px}
+  .hero-inline-logo .ring{top:2px;bottom:2px;width:12px;border-width:4px}
+  .hero-inline-logo .outer.left{left:0}.hero-inline-logo .inner.left{left:10px}.hero-inline-logo .inner.right{right:10px}.hero-inline-logo .outer.right{right:0}
+  .hero-copy-panel .hero-dek{font-size:30px;line-height:1.02;margin-top:24px}
+  .hero-image-panel{min-height:420px}
+  .hero-stats-overlay{position:absolute;width:100%;right:0;bottom:0}
+  .hero-stats-overlay .stat{min-height:82px;padding:14px 16px}
+  .hero-stats-overlay .stat strong{font-size:28px}
+  .hero-stats-overlay .stat span{font-size:8px;margin-top:8px}
+  .hero-lower-band{padding:24px 18px}
+  .hero-lower-copy{font-size:24px}
+}
+
+
+/* Opening viewport fit — architectural fix, not a scroll workaround */
+@media (min-width:901px){
+  .hero-stage{
+    height:clamp(560px, calc(100vh - 232px), 620px);
+    min-height:0!important;
+  }
+  .hero-copy-panel,
+  .hero-image-panel{
+    height:100%;
+    min-height:0!important;
+  }
+  .hero-copy-panel{
+    overflow:hidden;
+    padding-top:48px;
+    padding-bottom:38px;
+  }
+  .hero-copy-panel .eyebrow{margin-bottom:34px}
+  .hero-copy-panel .hero-dek{margin-top:28px}
+  .hero-copy-panel .hero-footline{margin-top:28px}
+  .hero-lower-band{
+    height:158px;
+    min-height:158px;
+    padding-top:24px;
+    padding-bottom:24px;
+  }
+}
+@supports (height:100dvh){
+  @media (min-width:901px){
+    .hero-stage{height:clamp(560px, calc(100dvh - 232px), 620px)}
+  }
+}
+
+</style>
+</head>
+<body>
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader-inner">
+    <div class="loader-top"><span>LISTEN / ARBITER</span><span id="loaderMeta">MEASURING 24 REAL ENTITIES</span></div>
+    <div class="loader-query" id="loaderQuery">Listening.</div>
+    <div><div class="loader-bar"><span></span></div></div>
+  </div>
+</div>
+
+<header class="nav">
+  <div class="shell nav-inner">
+    <a class="brand" href="#top" aria-label="LISTEN home">
+      <strong>LISTEN</strong>
+      <span>Social impact coherence</span>
+    </a>
+    <div class="nav-meta"><span class="signal-dot"></span><span>ARBITER live</span><span>official-source corpus</span></div>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero hero-fullbleed">
+    <div class="hero-stage">
+      <div class="hero-copy-panel">
+        <p class="eyebrow">Before deciding what to fund, build, teach, publish, or deploy</p>
+        <div class="hero-title-lockup">
+          <h1>Listen.</h1>
+          <span class="brand-mark hero-inline-logo" aria-hidden="true">
+            <span class="ring outer left"></span>
+            <span class="ring inner left"></span>
+            <span class="core"></span>
+            <span class="ring inner right"></span>
+            <span class="ring outer right"></span>
+          </span>
+        </div>
+        <p class="hero-dek">Describe a person.<br>A community.<br>A moment. A need.</p>
+        <div class="hero-footline">Real people · Real communities · Real needs</div>
+      </div>
+
+      <div class="hero-image-panel">
+        <img src="listen_assets/listen_01_eaeb46f1ab88.png" alt="Collaborative social-impact team in discussion">
+        <div class="hero-stats-overlay" aria-label="LISTEN corpus statistics">
+          <div class="stat"><strong id="statCount">24</strong><span>Real candidates</span></div>
+          <div class="stat"><strong>9</strong><span>Response forms</span></div>
+          <div class="stat"><strong>3</strong><span>Ways to listen</span></div>
+          <div class="stat"><strong>1</strong><span>ARBITER measurement</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-lower-band">
+      <div class="hero-lower-copy">Stop asking what programs exist.<br>Measure what actually fits the need.</div>
+      <div class="hero-lower-rule"></div>
+      <a class="hero-lower-link" href="#listenSurface">Start listening ↓</a>
+    </div>
+  </section>
+
+  <section class="mode-strip" id="listenSurface">
+    <div class="shell mode-row" id="modeRow">
+      <button class="mode-btn active" data-mode="person">Person</button>
+      <button class="mode-btn" data-mode="community">Community</button>
+      <button class="mode-btn" data-mode="movement">Movement</button>
+    </div>
+  </section>
+
+  <section class="listen-panel">
+    <div class="shell">
+      <div class="prompt-grid">
+        <div>
+          <div class="prompt-wrap">
+            <textarea id="query" rows="3" spellcheck="false">A young Black man is not looking to be saved. He is intelligent, angry, ambitious, distrustful of institutions, hungry for economic independence, and tired of being described by his deficits. What in this ecosystem actually speaks to him?</textarea>
+            <button class="go" id="go" aria-label="Measure">→</button>
+          </div>
+          <div class="examples" id="examples"></div>
+          <div class="status"><span id="statusText">ready · official-source corpus loaded</span><span id="candidateMeta">24 candidates</span></div>
+          <div class="error" id="errorBox"></div>
+        </div>
+        <div class="listen-note">One description enters. Programs, stories, leaders, organizations, opportunities, interventions and frameworks compete in the same ranked response field.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="soul-strip">
+    <div class="shell soul-grid">
+      <article class="soul-card">
+        <div class="soul-media"><img src="listen_assets/listen_02_22973e9b2a3f.png" alt="Reflective individual in a bright workspace"></div>
+        <div class="soul-copy"><div class="soul-label">Person</div><h3 class="soul-title">Start with a human being.</h3><p>Not a segment. Not a deficit frame. A real person with a real interior life.</p></div>
+      </article>
+      <article class="soul-card">
+        <div class="soul-media"><img src="listen_assets/listen_03_a00968e4ce48.png" alt="Small team working together around a table"></div>
+        <div class="soul-copy"><div class="soul-label">Community</div><h3 class="soul-title">Listen across the room.</h3><p>Programs, communities, organizations and stories can be measured in the same field.</p></div>
+      </article>
+      <article class="soul-card">
+        <div class="soul-media"><img src="listen_assets/listen_04_9bcb27664a01.png" alt="Mentor and young man in conversation"></div>
+        <div class="soul-copy"><div class="soul-label">Movement</div><h3 class="soul-title">See what actually connects.</h3><p>Find where institutions, funders, organizers and lived experience begin to diverge.</p></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="results" id="results">
+    <div class="results-head shell">
+      <div class="result-topline">
+        <div class="result-query" id="resultQuery"></div>
+        <div class="result-measure" id="resultMeasure"></div>
+      </div>
+      <div class="seats" id="seats"></div>
+      <div class="result-list" id="resultList"></div>
+    </div>
+  </section>
+
+  <section class="density">
+    <div class="shell">
+      <div class="section-head">
+        <h2>The ecosystem.</h2>
+        <p>Real organizations, programs, opportunities, stories, leaders, communities and frameworks. Every candidate links back to an official source.</p>
+      </div>
+      <div class="index-grid" id="indexGrid"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer shell">
+  <div class="footer-left">Actual General Intelligence, Inc. · ARBITER coherence engine</div>
+  <div class="footer-logo-wrap" aria-label="LISTEN symbol">
+    <span class="footer-logo" aria-hidden="true">
+      <span class="ring outer left"></span>
+      <span class="ring inner left"></span>
+      <span class="core"></span>
+      <span class="ring inner right"></span>
+      <span class="ring outer right"></span>
+    </span>
+  </div>
+  <div class="footer-right">LISTEN · prototype corpus for social impact discovery</div>
+</footer>
+
+<script>
+const ARBITER_URL='https://recast-reviver-outlook.ngrok-free.dev/v1/compare';
+
+const DATA=[
+  {
+    id:'mbk-alliance', type:'community', title:"My Brother's Keeper Alliance", org:'Obama Foundation',
+    desc:'A national network helping communities build safe, supportive environments and clear pathways to success for boys and young men of color through cross-sector action and six life milestones.',
+    tags:['boys and young men of color','place-based change','mentorship','cross-sector','pathways'],
+    source:'https://www.obama.org/programs/my-brothers-keeper-alliance/'
+  },
+  {
+    id:'bam', type:'program', title:'Becoming A Man (BAM)', org:'Youth Guidance',
+    desc:'A school-based group counseling program for young men in grades 7–12 that develops social-cognitive skills, responsible decision-making and positive participation in school and community.',
+    tags:['counseling','young men','school','social-emotional','decision-making'],
+    source:'https://www.youth-guidance.org/bam-becoming-a-man/'
+  },
+  {
+    id:'bam-fi', type:'program', title:'Becoming A Man Fellowship Initiative', org:'Youth Guidance Washington, DC',
+    desc:'A year-round counseling, mentoring and postsecondary-readiness program for male-identifying youth exposed to trauma and social, behavioral, cognitive or emotional challenges.',
+    tags:['trauma','mentoring','postsecondary','counseling','male youth'],
+    source:'https://www.youth-guidance.org/youth-guidance-washington-dc/'
+  },
+  {
+    id:'hidden-genius', type:'program', title:'Immersion Program', org:'The Hidden Genius Project',
+    desc:'A 15-month, 800-hour holistic mentorship experience in computer science, software development, entrepreneurship and leadership for Black male high-school students.',
+    tags:['Black male youth','technology','entrepreneurship','leadership','mentorship'],
+    source:'https://www.hiddengeniusproject.org/programs/'
+  },
+  {
+    id:'all-star-code', type:'program', title:'All Star Code', org:'All Star Code',
+    desc:'Computer-science education and career development focused on young Black and Latino men, building economic opportunity and pathways into the innovation economy.',
+    tags:['technology','economic mobility','Black youth','Latino youth','career pathway'],
+    source:'https://allstarcode.org/faqs/'
+  },
+  {
+    id:'brosis-rites', type:'program', title:'Rites of Passage Program', org:'The Brotherhood Sister Sol',
+    desc:'A long-term youth development program built around identity, history, social justice, political education, gender, relationships and community leadership.',
+    tags:['identity','Black youth','Latinx youth','political education','rites of passage'],
+    source:'https://brotherhood-sistersol.org/programs/rites-of-passage-program/'
+  },
+  {
+    id:'brosis-after-school', type:'program', title:'After School Program', org:'The Brotherhood Sister Sol',
+    desc:'A safe, enriched after-school space for young people ages 8–18 to learn, grow, form lasting relationships and develop agency.',
+    tags:['safe space','youth development','community','belonging','agency'],
+    source:'https://brotherhood-sistersol.org/programs/after-school-program/'
+  },
+  {
+    id:'100-black-men', type:'program', title:'Mentoring the 100 Way', org:'100 Black Men of America',
+    desc:'A national mentoring model pairing youth with positive role models and supporting education, health and wellness, economic empowerment and leadership development.',
+    tags:['mentoring','Black youth','role models','economic empowerment','leadership'],
+    source:'https://100blackmen.org/four-for-the-future/mentoring/'
+  },
+  {
+    id:'eagle-foundation', type:'organization', title:'The Eagle Academy Foundation', org:'The Eagle Academy Foundation',
+    desc:'A social-impact organization that challenges systemic barriers and empowers young men of color toward educational, career and life outcomes through direct impact and institutional change.',
+    tags:['young men of color','education','career','systemic barriers','institutional change'],
+    source:'https://eafny.org/'
+  },
+  {
+    id:'eagle-institute', type:'framework', title:'Eagle Institute', org:'The Eagle Academy Foundation',
+    desc:'A capacity-building model that trains, consults and convenes adults nationwide to strengthen how they serve and engage young men of color.',
+    tags:['capacity building','adults','young men of color','professional development','systems change'],
+    source:'https://eafny.org/programs/'
+  },
+  {
+    id:'nyc-men-heal', type:'opportunity', title:'NYC Men Heal', org:"NYC Young Men's Initiative", 
+    desc:'A pilot that recruits, trains and supports men of color into behavioral-health careers through scholarships, professional development and targeted support while expanding culturally responsive care.',
+    tags:['men of color','behavioral health','career pathway','scholarship','culturally responsive care'],
+    source:'https://www.nyc.gov/site/ymi/initiatives/programs.page'
+  },
+  {
+    id:'black-men-heal', type:'intervention', title:'Free Therapy for Men of Color', org:'Black Men Heal',
+    desc:'Free individual and group therapy for men of color, paired with therapists of color and designed to reduce cost, cultural-competency and stigma barriers to care.',
+    tags:['mental health','Black men','therapy','stigma','culturally responsive'],
+    source:'https://blackmenheal.org/all-about-us/'
+  },
+  {
+    id:'cares', type:'program', title:'National CARES Mentoring Movement', org:'National CARES Mentoring Movement',
+    desc:'Holistic, trauma-healing programming for children living in poverty, combined with large-scale recruitment, training and placement of African American mentors.',
+    tags:['mentoring','trauma healing','Black children','poverty','care'],
+    source:'https://www.caresmentoring.org/'
+  },
+  {
+    id:'cities-roadmap', type:'framework', title:'Roadmap to Safe, Healthy and Hopeful Communities', org:'Cities United',
+    desc:'A systems-level public-safety framework helping jurisdictions reduce violence affecting young Black men and boys while building opportunity, health, connection and hope.',
+    tags:['violence prevention','young Black men and boys','public safety','city systems','hope'],
+    source:'https://www.citiesunited.org/what-we-do'
+  },
+  {
+    id:'cities-fellowship', type:'opportunity', title:'Young Leader Fellowship', org:'Cities United',
+    desc:'An intensive seven-month fellowship for young leaders from partner cities, connecting them with mentors, experts and national peers to build knowledge, skills and networks.',
+    tags:['young leaders','fellowship','mentoring','network','violence prevention'],
+    source:'https://www.citiesunited.org/what-we-do'
+  },
+  {
+    id:'bme-community', type:'community', title:'BMe Community', org:'BMe Community',
+    desc:'A leadership and network model using Asset-Framing and vetted peer networks to build impact at leader, community and systems levels.',
+    tags:['asset framing','Black men','leadership','peer network','systems change'],
+    source:'https://www.bmecommunity.org/'
+  },
+  {
+    id:'boys-to-men', type:'program', title:'Boys to Men Tucson', org:'Boys to Men Tucson',
+    desc:'Programs that nurture socio-emotional growth for boys and masculine-identified youth, creating safe spaces that support healthy masculinity and diverse gender expression.',
+    tags:['boys','healthy masculinity','social-emotional','safe spaces','identity'],
+    source:'https://newprofit.org/partner/boys-to-men-tucson-inc/'
+  },
+  {
+    id:'new-profit', type:'funder', title:'New Profit', org:'New Profit',
+    desc:'A venture-philanthropy organization that funds and supports social entrepreneurs advancing equity and opportunity, with an emphasis on proximity to community genius and lived experience.',
+    tags:['philanthropy','social entrepreneurs','equity','capital','proximate leadership'],
+    source:'https://newprofit.org/'
+  },
+  {
+    id:'mental-health-catalyze', type:'funder', title:'Mental Health Equity Catalyze Cohort', org:'New Profit',
+    desc:'An early-stage funding and support cohort focused on upstream factors affecting mental and behavioral health, including culturally competent services, basic needs and social connection.',
+    tags:['mental health','equity','funding','social entrepreneurs','culturally competent care'],
+    source:'https://newprofit.org/catalyze-health-equity/'
+  },
+  {
+    id:'eji', type:'organization', title:'Equal Justice Initiative', org:'Equal Justice Initiative',
+    desc:'A nonprofit confronting mass incarceration, excessive punishment, racial and economic injustice, and human-rights abuses while creating hope for marginalized communities.',
+    tags:['racial justice','mass incarceration','legal advocacy','human rights','history'],
+    source:'https://eji.org/about/'
+  },
+  {
+    id:'eji-public-ed', type:'story', title:'Public Education on Racial Injustice', org:'Equal Justice Initiative',
+    desc:'Reports, interactive history projects, lesson plans, films and community remembrance work designed to confront the history of racial violence and change the national narrative.',
+    tags:['history','racial injustice','education','narrative change','memory'],
+    source:'https://eji.org/public-education/'
+  },
+  {
+    id:'ivan-jackson', type:'story', title:'Ivan Jackson — Cultural Pride as Foundation', org:'The Eagle Academy Foundation',
+    desc:'An Eagle Academy story about early education rooted in Black nationalism and cultural pride, and the role of identity formation in later growth and leadership.',
+    tags:['story','Black identity','cultural pride','education','young men'],
+    source:'https://eafny.org/ivan-jackson/'
+  },
+  {
+    id:'jamal-trotman', type:'story', title:'Jamal Trotman — Resilience, Determination and Purpose', org:'The Eagle Academy Foundation',
+    desc:'A story of navigating immigration, cultural assimilation and academic challenges through Eagle Academy and Morehouse College toward a life shaped by purpose.',
+    tags:['story','resilience','immigration','education','purpose'],
+    source:'https://eafny.org/jamal-trotman/'
+  },
+  {
+    id:'shawn-dove', type:'leader', title:'Shawn Dove', org:'New Profit / Corporation for Black Male Achievement',
+    desc:'A movement and community builder focused on Black male achievement, proximate leadership, social entrepreneurship, philanthropy and the work of building justice, opportunity, trust and collaboration.',
+    tags:['Black male achievement','movement building','philanthropy','leadership','community'],
+    source:'https://newprofit.org/people/shawn-dove/'
+  }
+];
+DATA.forEach(d=>{d.image=visualFor(d);});
+
+const MODE_EXAMPLES={
+  person:[
+    'A 17-year-old Black boy has been suspended twice, loves music, wants to make money, distrusts adults who speak to him like a case file, and is spending more time with older guys in his neighborhood. What could actually reach him right now?',
+    'A 42-year-old Black father has lost his job, feels he is failing his family, and would never describe himself as needing mental-health support. What could meet him without reducing him to a diagnosis?'
+  ],
+  community:[
+    'Black boys in this city are graduating, but many still do not see a believable path to economic independence, leadership or belonging. What in this ecosystem most coheres with that need?',
+    'A neighborhood is dealing with gun violence, distrust of institutions and young people who feel decisions are made about them without them. What responses actually fit?'
+  ],
+  movement:[
+    'The Black male achievement movement has spent years fighting deficit narratives. What work most strongly advances love, dignity, agency, economic power, belonging and intergenerational leadership now?',
+    'What should funders prioritize when communities are asking for both immediate safety and long-term systems change?'
+  ]
+};
+
+const SEATS={
+  human:{label:'the person',prefix:'From the lived experience of the person or people described, prioritize dignity, agency, trust, cultural fit, real barriers and what they may actually accept or use. '},
+  father:{label:'a father',prefix:'From the perspective of a Black father or caregiver who wants this person to be safe, whole, economically secure and respected, evaluate what fits. '},
+  school:{label:'the institution',prefix:'From the perspective of a school, public agency or institution responsible for outcomes, evaluate what fits while noticing where institutional incentives may diverge from lived need. '},
+  funder:{label:'the funder',prefix:'From the perspective of a funder allocating scarce capital for durable impact, scale, evidence, trust and community legitimacy, evaluate what fits. '},
+  organizer:{label:'the organizer',prefix:'From the perspective of a community organizer building power with people rather than delivering services to them, evaluate what fits. '},
+  employer:{label:'the employer',prefix:'From the perspective of an employer seeking credible talent pathways, economic mobility and long-term retention, evaluate what fits. '}
+};
+
+let currentMode='person';
+let currentSeat='human';
+let currentQuery='';
+let baselineScores=new Map();
+let lastResults=[];
+
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const VISUAL_BY_TYPE={
+  community:'listen_assets/listen_01_eaeb46f1ab88.png',
+  framework:'listen_assets/listen_03_a00968e4ce48.png',
+  funder:'listen_assets/listen_01_eaeb46f1ab88.png',
+  intervention:'listen_assets/listen_04_9bcb27664a01.png',
+  leader:'listen_assets/listen_04_9bcb27664a01.png',
+  opportunity:'listen_assets/listen_02_22973e9b2a3f.png',
+  organization:'listen_assets/listen_01_eaeb46f1ab88.png',
+  program:'listen_assets/listen_04_9bcb27664a01.png',
+  story:'listen_assets/listen_02_22973e9b2a3f.png'
+};
+function visualFor(item){return item?.image||VISUAL_BY_TYPE[item?.type]||'listen_assets/listen_01_eaeb46f1ab88.png';}
+
+function candidateText(m){
+  return [
+    `${m.title}.`,
+    `Type: ${m.type}.`,
+    `Organization: ${m.org}.`,
+    `Description: ${m.desc}`,
+    `Signals: ${m.tags.join(', ')}.`
+  ].join(' ');
+}
+
+function extractRows(data){
+  if(Array.isArray(data?.all))return data.all;
+  if(Array.isArray(data?.top))return data.top;
+  if(Array.isArray(data?.results))return data.results;
+  if(Array.isArray(data?.matches))return data.matches;
+  if(Array.isArray(data))return data;
+  return [];
+}
+function rowText(row){
+  if(Array.isArray(row))return row[0]??'';
+  return row?.text??row?.candidate??row?.content??row?.document??row?.value??row?.input??'';
+}
+function rowScore(row){
+  if(Array.isArray(row))return Number(row[1]??0);
+  return Number(row?.score??row?.coherence??row?.similarity??row?.value_score??0);
+}
+function rowIndex(row){
+  const v=Array.isArray(row)?row[2]:(row?.index??row?.idx??row?.candidate_index);
+  const n=Number(v); return Number.isInteger(n)&&n>=0?n:null;
+}
+function matchRow(row,candidates,texts){
+  const idx=rowIndex(row);
+  if(idx!==null&&candidates[idx])return candidates[idx];
+  const t=String(rowText(row)||'').trim().replace(/\s+/g,' ');
+  if(!t)return null;
+  for(let i=0;i<texts.length;i++){
+    const c=texts[i].trim().replace(/\s+/g,' ');
+    if(c===t||c.startsWith(t)||t.startsWith(c.slice(0,180)))return candidates[i];
+  }
+  return null;
+}
+
+async function measure(query,seat='human'){
+  const fullQuery=(SEATS[seat]?.prefix||'')+query;
+  const texts=DATA.map(candidateText);
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),45000);
+  try{
+    const res=await fetch(ARBITER_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json','ngrok-skip-browser-warning':'true'},
+      body:JSON.stringify({query:fullQuery,candidates:texts,use_freq:true,top_k:DATA.length}),
+      signal:controller.signal
+    });
+    const raw=await res.text();
+    if(!res.ok)throw new Error(`ARBITER ${res.status}: ${raw.slice(0,180)}`);
+    const data=JSON.parse(raw);
+    const rows=extractRows(data);
+    const mapped=rows.map(r=>{
+      const entity=matchRow(r,DATA,texts);
+      return entity?{...entity,score:rowScore(r)}:null;
+    }).filter(Boolean).sort((a,b)=>b.score-a.score);
+    if(!mapped.length)throw new Error('ARBITER returned no mappable rows.');
+    return mapped;
+  }finally{clearTimeout(timeout)}
+}
+
+function renderExamples(){
+  $('#examples').innerHTML=MODE_EXAMPLES[currentMode].map((q,i)=>`<button class="example" data-example="${i}">${i===0?'try this':'or this'}</button>`).join('');
+  $$('.example').forEach(btn=>btn.onclick=()=>{$('#query').value=MODE_EXAMPLES[currentMode][Number(btn.dataset.example)];resizeQuery()});
+}
+
+function renderSeats(){
+  $('#seats').innerHTML=Object.entries(SEATS).map(([key,v])=>`<button class="seat-btn ${key===currentSeat?'active':''}" data-seat="${key}">${esc(v.label)}</button>`).join('');
+  $$('.seat-btn').forEach(btn=>btn.onclick=async()=>{
+    const seat=btn.dataset.seat;
+    if(seat===currentSeat)return;
+    currentSeat=seat;
+    renderSeats();
+    await runMeasurement({reuseQuery:true});
+  });
+}
+
+function renderResults(results){
+  lastResults=results;
+  document.body.classList.add('has-results');
+  $('#resultQuery').textContent=currentQuery;
+  $('#resultMeasure').innerHTML=`${DATA.length} real candidates<br>${new Set(DATA.map(d=>d.type)).size} response forms<br>seat · ${esc(SEATS[currentSeat].label)}`;
+  $('#resultList').innerHTML=results.slice(0,10).map((r,i)=>{
+    const base=baselineScores.get(r.id);
+    const delta=(currentSeat!=='human'&&Number.isFinite(base))?r.score-base:null;
+    const deltaText=delta===null?'':`<span class="delta">Δ ${delta>=0?'+':''}${delta.toFixed(3)} vs person</span>`;
+    return `
+      <button class="result-row ${i===0?'top':''}" data-id="${esc(r.id)}">
+        <span class="cell rank">${String(i+1).padStart(2,'0')}</span>
+        <span class="cell result-thumb"><img src="${esc(visualFor(r))}" alt=""></span>
+        <span class="cell type">${esc(r.type)}</span>
+        <span class="cell title-cell"><h3>${esc(r.title)}</h3><span class="org">${esc(r.org)}</span></span>
+        <span class="cell desc">${esc(r.desc)}</span>
+        <span class="cell score"><strong>${r.score.toFixed(3)}</strong>coherence${deltaText}</span>
+      </button>
+      <div class="result-detail" data-detail="${esc(r.id)}">
+        <div class="detail-media"><img src="${esc(visualFor(r))}" alt=""></div>
+        <div>
+          <strong>${esc(r.title)}</strong>
+          <p style="margin:10px 0 0;color:#555;line-height:1.4">${esc(r.desc)}</p>
+          <div class="detail-tags">${r.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>
+        </div>
+        <div class="source-note">Official source<br><a class="source-link" href="${esc(r.source)}" target="_blank" rel="noopener">open source ↗</a></div>
+      </div>`;
+  }).join('');
+  $$('.result-row').forEach(row=>row.onclick=()=>{
+    const was=row.classList.contains('open');
+    $$('.result-row').forEach(r=>r.classList.remove('open'));
+    if(!was)row.classList.add('open');
+  });
+  renderSeats();
+  $('#results').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+async function runMeasurement({reuseQuery=false}={}){
+  const q=(reuseQuery?currentQuery:$('#query').value).trim();
+  if(!q)return;
+  currentQuery=q;
+  $('#errorBox').classList.remove('show');
+  $('#loaderQuery').textContent=q;
+  $('#loaderMeta').textContent=`MEASURING ${DATA.length} REAL ENTITIES · ${SEATS[currentSeat].label.toUpperCase()}`;
+  document.body.classList.add('loading');
+  const started=performance.now();
+  try{
+    const results=await measure(q,currentSeat);
+    if(currentSeat==='human')baselineScores=new Map(results.map(r=>[r.id,r.score]));
+    const elapsed=((performance.now()-started)/1000).toFixed(1);
+    $('#statusText').textContent=`resolved · ${elapsed}s · ARBITER`;
+    renderResults(results);
+  }catch(err){
+    const msg=err?.name==='AbortError'?'ARBITER request timed out.':(err?.message||String(err));
+    $('#errorBox').textContent=msg;
+    $('#errorBox').classList.add('show');
+    $('#statusText').textContent='measurement failed';
+  }finally{
+    document.body.classList.remove('loading');
+  }
+}
+
+function renderIndex(){
+  $('#statCount').textContent=DATA.length;
+  $('#candidateMeta').textContent=`${DATA.length} candidates`;
+  $('#indexGrid').innerHTML=DATA.map(d=>`<article class="index-item">
+    <div class="index-media"><img src="${esc(visualFor(d))}" alt=""></div>
+    <div class="index-copy"><div><div class="index-type">${esc(d.type)}</div><h4>${esc(d.title)}</h4><p>${esc(d.desc)}</p></div>
+    <a class="index-source" href="${esc(d.source)}" target="_blank" rel="noopener">${esc(d.org)} ↗</a></div>
+  </article>`).join('');
+}
+
+function resizeQuery(){const el=$('#query');el.style.height='auto';el.style.height=Math.min(240,el.scrollHeight)+'px'}
+
+$$('.mode-btn').forEach(btn=>btn.onclick=()=>{
+  currentMode=btn.dataset.mode;
+  $$('.mode-btn').forEach(b=>b.classList.toggle('active',b===btn));
+  $('#query').value=MODE_EXAMPLES[currentMode][0];
+  renderExamples();
+  resizeQuery();
+});
+$('#go').onclick=()=>runMeasurement();
+$('#query').addEventListener('input',resizeQuery);
+$('#query').addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();runMeasurement();}
+});
+renderExamples();
+renderIndex();
+resizeQuery();
+</script>
+
+
+</body>
+</html>
