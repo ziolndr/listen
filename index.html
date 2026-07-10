@@ -109,14 +109,11 @@ body.has-results .results{display:block}
 .seat-btn.active{color:#000;background:var(--wash)}
 .seat-btn.active::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;background:var(--signal)}
 .result-list{border-bottom:1px solid #000}
-.result-row{display:grid;grid-template-columns:56px 110px 102px minmax(240px,1.5fr) minmax(220px,1fr) 110px;border-bottom:1px solid var(--line);min-height:96px;background:#fff;text-decoration:none;color:inherit;transition:background .14s ease}
+.result-row{display:grid;grid-template-columns:56px 110px minmax(240px,1.5fr) minmax(220px,1fr) 110px;border-bottom:1px solid var(--line);min-height:96px;background:#fff;text-decoration:none;color:inherit;transition:background .14s ease}
 .result-row:hover{background:var(--wash)}
 .result-row.top{min-height:138px}
 .cell{padding:15px 14px;border-right:1px solid var(--line);min-width:0}
-.result-thumb{padding:0;overflow:hidden;background:#f3f3f0}
-.result-thumb img{display:block;width:100%;height:100%;object-fit:cover}
-.result-row.top .result-thumb img{filter:saturate(1.02)}
-.cell:last-child{border-right:0}
+.result-row.top .cell:last-child{border-right:0}
 .rank{font-family:var(--mono);font-size:11px;color:#777}
 .type{font-family:var(--mono);font-size:9px;text-transform:uppercase;color:#777;letter-spacing:.04em}
 .title-cell h3{margin:0;font-size:clamp(19px,2vw,29px);line-height:1.02;letter-spacing:-.9px;color:#000;font-weight:600}
@@ -125,9 +122,7 @@ body.has-results .results{display:block}
 .score{text-align:right;font-family:var(--mono);font-size:12px;color:#000}
 .score strong{display:block;font-family:var(--sans);font-size:29px;letter-spacing:-1px;line-height:1}
 .delta{display:block;margin-top:7px;font-family:var(--mono);font-size:8px;color:var(--muted)}
-.result-detail{display:none;grid-column:1/-1;border-top:1px solid var(--line);background:#fafafa;padding:18px 56px 22px;grid-template-columns:220px minmax(0,1fr) .85fr;gap:24px;align-items:start}
-.detail-media{background:#f3f3f0;border:1px solid var(--line);overflow:hidden;aspect-ratio:4/5}
-.detail-media img{display:block;width:100%;height:100%;object-fit:cover}
+.result-detail{display:none;grid-column:1/-1;border-top:1px solid var(--line);background:#fafafa;padding:18px 56px 22px;grid-template-columns:minmax(0,1fr) .85fr;gap:24px;align-items:start}
 .result-row.open + .result-detail{display:grid}
 .detail-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
 .tag{font-family:var(--mono);font-size:8px;border:1px solid var(--line-dark);padding:5px 7px;text-transform:uppercase;color:#666}
@@ -138,10 +133,8 @@ body.has-results .results{display:block}
 .section-head h2{margin:0;font-size:clamp(44px,7vw,102px);line-height:.78;letter-spacing:-5px;font-weight:600;color:#000}
 .section-head p{max-width:36ch;margin:0;font-size:15px;color:#666}
 .index-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid #000;border-left:1px solid var(--line)}
-.index-item{min-height:240px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;flex-direction:column;justify-content:space-between;gap:0;background:#fff}
+.index-item{min-height:220px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;flex-direction:column;justify-content:space-between;gap:0;background:#fff}
 .index-item:hover{background:var(--wash)}
-.index-media{aspect-ratio:16/10;overflow:hidden;background:#f2f2ef;border-bottom:1px solid var(--line)}
-.index-media img{display:block;width:100%;height:100%;object-fit:cover}
 .index-copy{padding:14px;display:flex;flex-direction:column;justify-content:space-between;gap:18px;flex:1}
 .index-type{font-family:var(--mono);font-size:8px;color:#888;text-transform:uppercase}
 .index-item h4{margin:0;font-size:18px;line-height:1.05;letter-spacing:-.5px;color:#000}
@@ -163,9 +156,9 @@ body.loading .loader{display:block}
   .hero-grid,.prompt-grid{grid-template-columns:1fr}
   .hero-side{border-left:0;border-top:1px solid var(--line);padding:22px 0 0}
   .prompt-grid{gap:16px}
-  .result-row{grid-template-columns:44px 82px 78px minmax(0,1fr) 84px}
+  .result-row{grid-template-columns:44px 78px minmax(0,1fr) 84px}
   .result-row .desc{display:none}
-  .result-detail{padding:18px 20px;grid-template-columns:160px 1fr}
+  .result-detail{padding:18px 20px;grid-template-columns:1fr}
   .result-detail .source-note{grid-column:1/-1}
   .index-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .soul-grid{grid-template-columns:1fr}
@@ -182,9 +175,8 @@ body.loading .loader{display:block}
   textarea{font-size:34px;letter-spacing:-1.5px}
   .result-topline{display:block}
   .result-measure{text-align:left;margin-top:16px}
-  .result-row{grid-template-columns:34px 60px 58px minmax(0,1fr) 72px;min-height:112px}
-  .result-row .result-thumb{display:none}
-  .cell{padding:12px 8px}
+  .result-row{grid-template-columns:34px 58px minmax(0,1fr) 72px;min-height:112px}
+  .result-row   .cell{padding:12px 8px}
   .title-cell h3{font-size:19px}
   .score strong{font-size:22px}
   .index-grid{grid-template-columns:1fr}
@@ -659,18 +651,6 @@ let lastResults=[];
 const $=s=>document.querySelector(s);
 const $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const VISUAL_BY_TYPE={
-  community:'listen_assets/listen_01_eaeb46f1ab88.png',
-  framework:'listen_assets/listen_03_a00968e4ce48.png',
-  funder:'listen_assets/listen_01_eaeb46f1ab88.png',
-  intervention:'listen_assets/listen_04_9bcb27664a01.png',
-  leader:'listen_assets/listen_04_9bcb27664a01.png',
-  opportunity:'listen_assets/listen_02_22973e9b2a3f.png',
-  organization:'listen_assets/listen_01_eaeb46f1ab88.png',
-  program:'listen_assets/listen_04_9bcb27664a01.png',
-  story:'listen_assets/listen_02_22973e9b2a3f.png'
-};
-function visualFor(item){return VISUAL_BY_TYPE[item?.type]||'listen_assets/listen_01_eaeb46f1ab88.png';}
 
 
 function candidateText(m){
@@ -768,14 +748,12 @@ function renderResults(results){
     return `
       <button class="result-row ${i===0?'top':''}" data-id="${esc(r.id)}">
         <span class="cell rank">${String(i+1).padStart(2,'0')}</span>
-        <span class="cell result-thumb"><img src="${esc(visualFor(r))}" alt=""></span>
         <span class="cell type">${esc(r.type)}</span>
         <span class="cell title-cell"><h3>${esc(r.title)}</h3><span class="org">${esc(r.org)}</span></span>
         <span class="cell desc">${esc(r.desc)}</span>
         <span class="cell score"><strong>${r.score.toFixed(3)}</strong>coherence${deltaText}</span>
       </button>
       <div class="result-detail" data-detail="${esc(r.id)}">
-        <div class="detail-media"><img src="${esc(visualFor(r))}" alt=""></div>
         <div>
           <strong>${esc(r.title)}</strong>
           <div class="detail-tags">${r.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>
@@ -821,7 +799,6 @@ function renderIndex(){
   $('#statCount').textContent=DATA.length;
   $('#candidateMeta').textContent=`${DATA.length} candidates`;
   $('#indexGrid').innerHTML=DATA.map(d=>`<article class="index-item">
-    <div class="index-media"><img src="${esc(visualFor(d))}" alt=""></div>
     <div class="index-copy"><div><div class="index-type">${esc(d.type)}</div><h4>${esc(d.title)}</h4><p>${esc(d.desc)}</p></div>
     <a class="index-source" href="${esc(d.source)}" target="_blank" rel="noopener">${esc(d.org)} ↗</a></div>
   </article>`).join('');
