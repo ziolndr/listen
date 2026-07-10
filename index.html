@@ -411,7 +411,7 @@ h1{font-size:clamp(92px,9vw,150px);line-height:.78;letter-spacing:-.085em}
         <div>
           <div class="prompt-wrap">
             <textarea id="query" rows="3" spellcheck="false">A young Black man is not looking to be saved. He is intelligent, angry, ambitious, distrustful of institutions, hungry for economic independence, and tired of being described by his deficits. What in this ecosystem actually speaks to him?</textarea>
-            <button class="go" id="go" type="button" aria-label="Measure">→</button>
+            <button class="go" id="go" type="button" aria-label="Measure" onclick="runMeasurement()">→</button>
           </div>
           <div class="examples" id="examples"></div>
           <div class="status"><span id="statusText">ready · official-source corpus loaded</span><span id="candidateMeta">24 candidates</span></div>
@@ -794,10 +794,19 @@ function renderResults(results){
 }
 
 async function runMeasurement({reuseQuery=false}={}){
+  if(isMeasuring)return;
   const q=(reuseQuery?currentQuery:$('#query').value).trim();
-  if(!q)return;
+  if(!q){
+    $('#errorBox').textContent='Describe a person, community, moment, or need first.';
+    $('#errorBox').classList.add('show');
+    return;
+  }
+  isMeasuring=true;
   currentQuery=q;
+  const go=$('#go');
+  if(go){go.disabled=true;go.setAttribute('aria-busy','true');}
   $('#errorBox').classList.remove('show');
+  $('#statusText').textContent='measuring · sending to ARBITER';
   $('#loaderQuery').textContent=q;
   $('#loaderMeta').textContent=`MEASURING ${DATA.length} REAL ENTITIES · ${SEATS[currentSeat].label.toUpperCase()}`;
   document.body.classList.add('loading');
@@ -814,7 +823,9 @@ async function runMeasurement({reuseQuery=false}={}){
     $('#errorBox').classList.add('show');
     $('#statusText').textContent='measurement failed';
   }finally{
+    isMeasuring=false;
     document.body.classList.remove('loading');
+    if(go){go.disabled=false;go.removeAttribute('aria-busy');}
   }
 }
 
@@ -837,7 +848,6 @@ $$('.mode-btn').forEach(btn=>btn.onclick=()=>{
   renderExamples();
   resizeQuery();
 });
-$('#go').onclick=()=>runMeasurement();
 
 $('#query').addEventListener('input',resizeQuery);
 $('#query').addEventListener('keydown',e=>{
